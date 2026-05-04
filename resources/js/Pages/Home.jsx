@@ -11,7 +11,7 @@ export default function Home({ posts = [] }) {
                             <div className="p-6 text-center text-gray-900">
                                 <p className="mb-4">You haven't created any posts yet.</p>
                                 <Link
-                                    href={route('create')}
+                                    href={route('posts.create')}
                                     className="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
                                 >
                                     Create your first post

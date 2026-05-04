@@ -29,10 +29,10 @@ Route::get('/home', function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/post/create', [PostController::class, 'create'])->name('create');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-    Route::patch('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::match(['post', 'patch'], '/posts/{post}', [PostController::class, 'update'])->name('posts.update');
 });
 
 Route::middleware('auth')->group(function () {

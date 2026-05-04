@@ -1,12 +1,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputError from '@/Components/InputError';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 export default function Show({ post }) {
     const [isEditing, setIsEditing] = useState(false);
     const [preview, setPreview] = useState(null);
-    const { data, setData, patch, processing, errors, reset } = useForm({
+    const { data, setData, post: handlePost, processing, errors, reset } = useForm({
         title: post.title ?? '',
         description: post.description ?? '',
         image: null,
@@ -30,7 +31,9 @@ export default function Show({ post }) {
     const submit = (event) => {
         event.preventDefault();
 
-        patch(route('posts.update', post.id), {
+        handlePost(route('posts.update', post.id), {
+            _method: 'patch',
+            forceFormData: true,
             onSuccess: () => {
                 setIsEditing(false);
                 setPreview(null);
@@ -45,7 +48,16 @@ export default function Show({ post }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div className="relative overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                                                       <div className="absolute top-0 left-0">
+                                    <button
+                                        type="button"
+                                        onClick={() => router.visit(route('home'))}
+                                        className="inline-flex items-center p-2 text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-100"
+                                    >
+                                        <ArrowLeft size={24} />
+                                    </button>
+                                </div>
                         <div className="grid gap-8 p-6 md:grid-cols-2">
                             <div className="flex items-center justify-center">
                                 {(preview || post.image_path) && (
@@ -105,13 +117,6 @@ export default function Show({ post }) {
                                                 })}
                                             </p>
                                         </div>
-
-                                        <Link
-                                            href={route('home')}
-                                            className="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
-                                        >
-                                            Back to Posts
-                                        </Link>
                                     </div>
                                 ) : (
                                     <form onSubmit={submit} className="pt-12">
