@@ -73,4 +73,20 @@ class PostController extends Controller
 
         return redirect()->route('posts.show', $post)->with('success', 'Post updated.');
     }
+
+    /**
+     * Delete the specified resource from storage.
+     */
+    public function destroy(Post $post): RedirectResponse
+    {
+        abort_unless($post->user_id === Auth::id(), 403);
+
+        if ($post->image_path) {
+            Storage::disk('public')->delete($post->image_path);
+        }
+
+        $post->delete();
+
+        return redirect()->route('home')->with('success', 'Post deleted.');
+    }
 }

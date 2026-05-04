@@ -1,12 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputError from '@/Components/InputError';
+import Modal from '@/Components/Modal';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2 } from 'lucide-react';
 
 export default function Show({ post }) {
     const [isEditing, setIsEditing] = useState(false);
     const [preview, setPreview] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const { data, setData, post: handlePost, processing, errors, reset } = useForm({
         title: post.title ?? '',
         description: post.description ?? '',
@@ -26,6 +28,15 @@ export default function Show({ post }) {
         const reader = new FileReader();
         reader.onloadend = () => setPreview(reader.result);
         reader.readAsDataURL(file);
+    };
+
+    const handleDelete = () => {
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete = () => {
+        setShowDeleteModal(false);
+        router.delete(route('posts.delete', post.id));
     };
 
     const submit = (event) => {
@@ -70,15 +81,24 @@ export default function Show({ post }) {
                             </div>
 
                             <div className="relative">
-                                <div className="absolute top-0 right-0">
+                                <div className="absolute top-0 right-0 flex gap-2">
                                     {!isEditing ? (
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsEditing(true)}
-                                            className="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
-                                        >
-                                            edit
-                                        </button>
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsEditing(true)}
+                                                className="inline-flex items-center p-2 text-indigo-600 bg-white border border-indigo-600 rounded-md hover:bg-indigo-50"
+                                            >
+                                                <Pencil size={20} />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={handleDelete}
+                                                className="inline-flex items-center p-2 text-red-600 bg-white border border-red-600 rounded-md hover:bg-red-50"
+                                            >
+                                                <Trash2 size={20} />
+                                            </button>
+                                        </>
                                     ) : (
                                         <button
                                             type="button"
@@ -174,6 +194,27 @@ export default function Show({ post }) {
                     </div>
                 </div>
             </div>
+
+            <Modal show={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+                <div className="p-6">
+                    <h2 className="mb-4 text-lg font-semibold text-gray-900">Delete Post</h2>
+                    <p className="mb-6 text-gray-600">Are you sure you want to delete this post? This action cannot be undone.</p>
+                    <div className="flex justify-end gap-2">
+                        <button
+                            onClick={() => setShowDeleteModal(false)}
+                            className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={confirmDelete}
+                            className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-md hover:bg-red-700"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </AuthenticatedLayout>
     );
 }
