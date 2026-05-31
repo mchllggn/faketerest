@@ -59,16 +59,15 @@ export default function Show({ post }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="relative overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                                                       <div className="absolute top-0 left-0">
-                                    <button
-                                        type="button"
-                                        onClick={() => router.visit(route('home'))}
-                                        className="inline-flex items-center p-2 text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-100"
-                                    >
-                                        <ArrowLeft size={24} />
-                                    </button>
-                                </div>
+                    <div className="relative overflow-hidden bg-white shadow-sm sm:rounded-lg">                                                      <div className="absolute top-0 left-0">
+                        <button
+                            type="button"
+                            onClick={() => router.visit(route('home'))}
+                            className="inline-flex items-center p-2 text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-100"
+                        >
+                            <ArrowLeft size={24} />
+                        </button>
+                    </div>
                         <div className="grid gap-8 p-6 md:grid-cols-2">
                             <div className="flex items-center justify-center">
                                 {(preview || post.image_path) && (

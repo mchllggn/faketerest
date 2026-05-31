@@ -1,9 +1,9 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage, Head } from '@inertiajs/react';
-import { useState } from 'react';
+import ApplicationLogo from "@/Components/ApplicationLogo";
+import Dropdown from "@/Components/Dropdown";
+import NavLink from "@/Components/NavLink";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
+import { Link, usePage, Head } from "@inertiajs/react";
+import { useState } from "react";
 
 export default function AuthenticatedLayout({ title, header, children }) {
     const user = usePage().props.auth.user;
@@ -13,7 +13,7 @@ export default function AuthenticatedLayout({ title, header, children }) {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <Head title={title}/>
+            <Head title={title} />
             <nav className="bg-white border-b border-gray-100">
                 <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
@@ -26,14 +26,14 @@ export default function AuthenticatedLayout({ title, header, children }) {
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('home')}
-                                    active={route().current('home')}
+                                    href={route("home")}
+                                    active={route().current("home")}
                                 >
                                     Home
                                 </NavLink>
                                 <NavLink
-                                    href={route('posts.create')}
-                                    active={route().current('posts.create')}
+                                    href={route("posts.create")}
+                                    active={route().current("posts.create")}
                                 >
                                     Create
                                 </NavLink>
@@ -69,12 +69,12 @@ export default function AuthenticatedLayout({ title, header, children }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            href={route('profile.edit')}
+                                            href={route("profile.edit")}
                                         >
                                             Profile
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route('logout')}
+                                            href={route("logout")}
                                             method="post"
                                             as="button"
                                         >
@@ -103,8 +103,8 @@ export default function AuthenticatedLayout({ title, header, children }) {
                                     <path
                                         className={
                                             !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
+                                                ? "inline-flex"
+                                                : "hidden"
                                         }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -114,8 +114,8 @@ export default function AuthenticatedLayout({ title, header, children }) {
                                     <path
                                         className={
                                             showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
+                                                ? "inline-flex"
+                                                : "hidden"
                                         }
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
@@ -130,20 +130,20 @@ export default function AuthenticatedLayout({ title, header, children }) {
 
                 <div
                     className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
+                        (showingNavigationDropdown ? "block" : "hidden") +
+                        " sm:hidden"
                     }
                 >
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            href={route('home')}
-                            active={route().current('home')}
+                            href={route("home")}
+                            active={route().current("home")}
                         >
                             Home
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            href={route('posts.create')}
-                            active={route().current('posts.create')}
+                            href={route("posts.create")}
+                            active={route().current("posts.create")}
                         >
                             Create
                         </ResponsiveNavLink>
@@ -160,12 +160,12 @@ export default function AuthenticatedLayout({ title, header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
+                            <ResponsiveNavLink href={route("profile.edit")}>
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
-                                href={route('logout')}
+                                href={route("logout")}
                                 as="button"
                             >
                                 Log Out
