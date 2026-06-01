@@ -43,7 +43,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        abort_unless($post->user_id === Auth::id(), 403);
+        abort_unless((string) $post->user_id === (string) Auth::id(), 403);
 
         return inertia('Posts/Show', [
             'post' => $post,
@@ -55,7 +55,7 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post): RedirectResponse
     {
-        abort_unless($post->user_id === Auth::id(), 403);
+        abort_unless((string) $post->user_id === (string) Auth::id(), 403);
 
         $data = $request->validated();
 
@@ -79,7 +79,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post): RedirectResponse
     {
-        abort_unless($post->user_id === Auth::id(), 403);
+        abort_unless((string) $post->user_id === (string) Auth::id(), 403);
 
         if ($post->image_path) {
             Storage::disk('public')->delete($post->image_path);

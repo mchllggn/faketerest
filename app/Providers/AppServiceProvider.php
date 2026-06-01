@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Godruoyi\Snowflake\LaravelSequenceResolver;
+use Godruoyi\Snowflake\Snowflake;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +14,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton('snowflake', function ($app) {
+            return (new Snowflake())
+                ->setStartTimeStamp(strtotime('2019-10-10') * 1000)
+                ->setSequenceResolver(
+                    (new LaravelSequenceResolver($app->get('cache.store')))
+                        ->setCachePrefix(sprintf('%s:snowflake:', config('app.name', 'laravel-app')))
+                );
+        });
     }
 
     /**

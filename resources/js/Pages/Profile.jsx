@@ -44,16 +44,16 @@ export default function Profile({ posts = [] }) {
                     </div>
                     <div className="flex items-center space-x-4 ">
                         <button
-                            onClick={() => setSortTab("saved")}
-                            className={`${sortTab === "saved" ? " bg-gray-800 text-white" : "bg-gray-300 text-gray-800"} px-4 py-2 rounded-full font-semibold`}
-                        >
-                            Your Saved
-                        </button>
-                        <button
                             onClick={() => setSortTab("created")}
                             className={`${sortTab === "created" ? " bg-gray-800 text-white" : "bg-gray-300 text-gray-800"} px-4 py-2 rounded-full font-semibold`}
                         >
                             Created by You
+                        </button>
+                        <button
+                            onClick={() => setSortTab("saved")}
+                            className={`${sortTab === "saved" ? " bg-gray-800 text-white" : "bg-gray-300 text-gray-800"} px-4 py-2 rounded-full font-semibold`}
+                        >
+                            Your Saved
                         </button>
                     </div>
                 </nav>
