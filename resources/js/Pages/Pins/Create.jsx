@@ -14,7 +14,7 @@ export default function Create() {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('posts.store'), {
+        post(route('pins.store'), {
             forceFormData: true,
             onSuccess: () => {
                 reset('title', 'description', 'image');

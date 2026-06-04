@@ -51,10 +51,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the posts for the user.
+     * Get the pins for the user.
      */
-    public function posts(): HasMany
+    public function pins(): HasMany
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Pin::class);
     }
 }

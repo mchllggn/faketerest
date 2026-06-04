@@ -32,8 +32,8 @@ export default function AuthenticatedLayout({ title, header, children }) {
                                     Home
                                 </NavLink>
                                 <NavLink
-                                    href={route("posts.create")}
-                                    active={route().current("posts.create")}
+                                    href={route("pins.create")}
+                                    active={route().current("pins.create")}
                                 >
                                     Create
                                 </NavLink>
@@ -142,8 +142,8 @@ export default function AuthenticatedLayout({ title, header, children }) {
                             Home
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
-                            href={route("posts.create")}
-                            active={route().current("posts.create")}
+                            href={route("pins.create")}
+                            active={route().current("pins.create")}
                         >
                             Create
                         </ResponsiveNavLink>

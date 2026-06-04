@@ -5,8 +5,9 @@ namespace App\Models;
 use App\Models\Concerns\HasSnowflakeId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
-class Post extends Model
+class Pin extends Model
 {
     use HasFactory, HasSnowflakeId;
 
@@ -21,6 +22,15 @@ class Post extends Model
         'description',
         'image_path',
     ];
+
+    protected static function booted()
+    {
+        static::deleting(function ($pin) {
+            if ($pin->image_path) {
+                Storage::delete($pin->image_path);
+            }
+        });
+    }
 
     public function user()
     {

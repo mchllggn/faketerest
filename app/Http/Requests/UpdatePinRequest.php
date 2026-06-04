@@ -2,21 +2,21 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Post;
+use App\Models\Pin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class UpdatePostRequest extends FormRequest
+class UpdatePinRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        $post = $this->route('post');
+        $pin = $this->route('pin');
 
-        return Auth::check() && $post instanceof Post
-            && (string) $post->user_id === (string) Auth::id();
+        return Auth::check() && $pin instanceof Pin
+            && (string) $pin->user_id === (string) Auth::id();
     }
 
     /**

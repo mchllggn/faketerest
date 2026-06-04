@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\PinController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -17,19 +17,19 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    $posts = Auth::user()->posts;
+    $pins = Auth::user()->pins;
     return Inertia::render('Home', [
-        'posts' => $posts,
+        'pins' => $pins,
     ]);
 })->middleware(['auth', 'verified'])->name('home');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-    Route::match(['post', 'patch'], '/posts/{post}', [PostController::class, 'update'])->name('posts.update');
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.delete');
+    Route::get('/pins/create', [PinController::class, 'create'])->name('pins.create');
+    Route::post('/pins', [PinController::class, 'store'])->name('pins.store');
+    Route::get('/pins/{pin}', [PinController::class, 'show'])->name('pins.show');
+    Route::match(['post', 'patch'], '/pins/{pin}', [PinController::class, 'update'])->name('pins.update');
+    Route::delete('/pins/{pin}', [PinController::class, 'destroy'])->name('pins.delete');
 });
 
 Route::middleware('auth')->group(function () {

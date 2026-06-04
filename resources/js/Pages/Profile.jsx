@@ -2,10 +2,9 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { usePage, Link } from "@inertiajs/react";
 import { useState } from "react";
 
-export default function Profile({ posts = [] }) {
+export default function Profile({ pins = [] }) {
     const user = usePage().props.auth.user;
     const [activeTab, setActiveTab] = useState("pins");
-    const [sortTab, setSortTab] = useState("created");
 
     return (
         <AuthenticatedLayout>
@@ -20,7 +19,7 @@ export default function Profile({ posts = [] }) {
                         </div>
                     </div>
                     <Link
-                        href={route("posts.create")}
+                        href={route("pins.create")}
                         className="px-6 py-3 text-white bg-red-600 rounded-full"
                     >
                         Create
@@ -35,72 +34,34 @@ export default function Profile({ posts = [] }) {
                         >
                             Pins
                         </button>
-                        <button
-                            onClick={() => setActiveTab("boards")}
-                            className={`${activeTab === "boards" ? "underline" : ""} text-lg font-medium text-gray-700 hover:underline underline-offset-4 decoration-2`}
-                        >
-                            Boards
-                        </button>
-                    </div>
-                    <div className="flex items-center space-x-4 ">
-                        <button
-                            onClick={() => setSortTab("created")}
-                            className={`${sortTab === "created" ? " bg-gray-800 text-white" : "bg-gray-300 text-gray-800"} px-4 py-2 rounded-full font-semibold`}
-                        >
-                            Created by You
-                        </button>
-                        <button
-                            onClick={() => setSortTab("saved")}
-                            className={`${sortTab === "saved" ? " bg-gray-800 text-white" : "bg-gray-300 text-gray-800"} px-4 py-2 rounded-full font-semibold`}
-                        >
-                            Your Saved
-                        </button>
                     </div>
                 </nav>
 
                 <div className="mt-8 text-center">
-                    {activeTab === "pins" ? (
-                        posts.length === 0 ? (
-                            <div className="mt-20">
-                                <p className="text-gray-500">
-                                    You haven't created any posts yet.
-                                </p>
-                                <div className="mt-6">
-                                    <Link
-                                        href={route("posts.create")}
-                                        className="px-6 py-3 text-white bg-red-600 rounded-full"
-                                    >
-                                        Create a board
-                                    </Link>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-2 gap-4 mt-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-                                {posts.map((post) => (
-                                    <Link
-                                        key={post.id}
-                                        href={route("posts.show", post.id)}
-                                    >
-                                        <div className="overflow-hidden rounded-lg shadow-sm cursor-pointer group">
-                                            {post.image_path ? (
-                                                <img
-                                                    src={`/storage/${post.image_path}`}
-                                                    alt={post.title}
-                                                    className="w-full h-full object-cover aspect-[9/16] group-hover:brightness-75 transition-all duration-200"
-                                                />
-                                            ) : (
-                                                <div className="flex items-center justify-center w-full h-48 bg-gray-100">
-                                                    {post.title}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        )
-                    ) : activeTab === "boards" ? (
-                        <div>Boards</div>
-                    ) : null}
+                    {
+                        <div className="grid grid-cols-2 gap-4 mt-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+                            {pins.map((pin) => (
+                                <Link
+                                    key={pin.id}
+                                    href={route("pins.show", pin.id)}
+                                >
+                                    <div className="overflow-hidden rounded-lg shadow-sm cursor-pointer group">
+                                        {pin.image_path ? (
+                                            <img
+                                                src={`/storage/${pin.image_path}`}
+                                                alt={pin.title}
+                                                className="w-full h-full object-cover aspect-[9/16] group-hover:brightness-75 transition-all duration-200"
+                                            />
+                                        ) : (
+                                            <div className="flex items-center justify-center w-full h-48 bg-gray-100">
+                                                {pin.title}
+                                            </div>
+                                        )}
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    }
                 </div>
             </div>
         </AuthenticatedLayout>

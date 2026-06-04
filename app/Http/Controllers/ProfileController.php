@@ -18,9 +18,9 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        $posts = Auth::user()->posts;
+        $pins = Auth::user()->pins;
         return Inertia::render('Profile', [
-            'posts' => $posts,
+            'pins' => $pins,
         ]);
     }
 
