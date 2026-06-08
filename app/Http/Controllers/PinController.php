@@ -35,7 +35,7 @@ class PinController extends Controller
             'image_path' => $path,
         ]);
 
-        return redirect()->route('home')->with('success', 'Pin created.');
+        return redirect()->back()->with('success', 'Pin created.');
     }
 
     /**

@@ -1,3 +1,4 @@
+import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { usePage, Link } from "@inertiajs/react";
 import { useState } from "react";
@@ -18,11 +19,8 @@ export default function Profile({ pins = [] }) {
                             {user.name}
                         </div>
                     </div>
-                    <Link
-                        href={route("pins.create")}
-                        className="px-6 py-3 text-white bg-red-600 rounded-full"
-                    >
-                        Create
+                    <Link href={route("pins.create")}>
+                        <PrimaryButton>Create</PrimaryButton>
                     </Link>
                 </div>
 
