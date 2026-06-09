@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PinController;
+use App\Http\Controllers\Auth\SocialiteController;
+use App\Models\Pin;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -17,12 +18,14 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    $pins = Auth::user()->pins;
+    $pins = Pin::all();
     return Inertia::render('Home', [
         'pins' => $pins,
     ]);
 })->middleware(['auth', 'verified'])->name('home');
 
+Route::get('auth/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
+Route::get('auth/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pins/create', [PinController::class, 'create'])->name('pins.create');
@@ -33,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/settings', fn() => Inertia::render('Settings'))->name('settings.index');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
