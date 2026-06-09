@@ -10,7 +10,14 @@ export default function Profile({ pins = [] }) {
 
     return (
         <AuthenticatedLayout>
-            <Toaster />
+            <Toaster
+                toastOptions={{
+                    classNames: {
+                        success: "[&_svg]:text-green-500",
+                        error: "[&_svg]:text-red-500",
+                    },
+                }}
+            />
             <div className="max-w-6xl px-6 py-12 mx-auto">
                 <div className="flex flex-col items-center justify-center mb-8">
                     <div className="flex items-center mb-4 space-x-4">

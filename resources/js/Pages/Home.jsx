@@ -10,10 +10,8 @@ export default function Home({ pins = [] }) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     {pins.length === 0 ? (
                         <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                            <div className="p-6 text-center text-gray-900">
-                                <p className="mb-4">
-                                    You haven't created any pins yet.
-                                </p>
+                            <div className="text-center text-gray-900">
+                                <p>You haven't created any pins yet.</p>
                             </div>
                         </div>
                     ) : (

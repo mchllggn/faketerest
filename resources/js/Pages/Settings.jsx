@@ -41,10 +41,10 @@ export default function Settings() {
         patch(route("profile.update"), {
             onSuccess: () => {
                 reset();
-                toast("Profile updated successfully");
+                toast.success("Profile updated successfully");
             },
-            onError: () => {
-                toast("Failed to update profile");
+            onError: (error) => {
+                toast.error(error.message);
             },
         });
     };

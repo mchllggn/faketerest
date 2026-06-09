@@ -18,10 +18,10 @@ export default function AuthenticatedLayout({ title, header, children }) {
             <Head title={title} />
             <nav className="bg-white border-b border-gray-100">
                 <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-16">
+                    <div className="flex items-center justify-between h-16">
                         <div className="flex items-center shrink-0">
                             <Link href="/">
-                                <ApplicationLogo className="block w-auto text-gray-800 fill-current h-9" />
+                                <ApplicationLogo className="h-12" />
                             </Link>
                         </div>
 
