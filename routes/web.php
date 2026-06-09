@@ -15,10 +15,10 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->middleware(['guest']);
 
 Route::get('/home', function () {
-    $pins = Pin::all();
+    $pins = Pin::with('user')->get();
     return Inertia::render('Home', [
         'pins' => $pins,
     ]);
