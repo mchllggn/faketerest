@@ -35,7 +35,7 @@ class PinController extends Controller
             'image_path' => $path,
         ]);
 
-        return redirect()->back()->with('success', 'Pin created.');
+        return redirect()->route('profile.edit')->with('success', 'Pin created.');
     }
 
     /**
@@ -87,6 +87,6 @@ class PinController extends Controller
 
         $pin->delete();
 
-        return redirect()->route('home')->with('success', 'Pin deleted.');
+        return redirect()->route('profile.edit')->with('success', 'Pin deleted.');
     }
 }

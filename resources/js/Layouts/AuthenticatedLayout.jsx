@@ -3,6 +3,8 @@ import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage, Head } from "@inertiajs/react";
+import { Plus } from "lucide-react";
+import { House } from "lucide-react";
 import { useState } from "react";
 
 export default function AuthenticatedLayout({ title, header, children }) {
@@ -17,30 +19,27 @@ export default function AuthenticatedLayout({ title, header, children }) {
             <nav className="bg-white border-b border-gray-100">
                 <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
-                        <div className="flex">
-                            <div className="flex items-center shrink-0">
-                                <Link href="/">
-                                    <ApplicationLogo className="block w-auto text-gray-800 fill-current h-9" />
-                                </Link>
-                            </div>
+                        <div className="flex items-center shrink-0">
+                            <Link href="/">
+                                <ApplicationLogo className="block w-auto text-gray-800 fill-current h-9" />
+                            </Link>
+                        </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                            <div className="hidden mx-6 space-x-8 sm:flex">
                                 <NavLink
                                     href={route("home")}
                                     active={route().current("home")}
                                 >
-                                    Home
+                                    <House className="w-6 h-6" />
                                 </NavLink>
                                 <NavLink
                                     href={route("pins.create")}
                                     active={route().current("pins.create")}
                                 >
-                                    Create
+                                    <Plus className="w-6 h-6" />
                                 </NavLink>
                             </div>
-                        </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -72,6 +71,11 @@ export default function AuthenticatedLayout({ title, header, children }) {
                                             href={route("profile.edit")}
                                         >
                                             Profile
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route("settings.index")}
+                                        >
+                                            Settings
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route("logout")}

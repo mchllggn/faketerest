@@ -2,6 +2,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { usePage, Link } from "@inertiajs/react";
 import { useState } from "react";
+import { Toaster } from "sonner";
 
 export default function Profile({ pins = [] }) {
     const user = usePage().props.auth.user;
@@ -9,6 +10,7 @@ export default function Profile({ pins = [] }) {
 
     return (
         <AuthenticatedLayout>
+            <Toaster />
             <div className="max-w-6xl px-6 py-12 mx-auto">
                 <div className="flex flex-col items-center justify-center mb-8">
                     <div className="flex items-center mb-4 space-x-4">

@@ -1,11 +1,16 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import InputError from "@/Components/InputError";
 import Modal from "@/Components/Modal";
-import { Head, useForm, router } from "@inertiajs/react";
+import { Head, useForm, router, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
+import { toast } from "sonner";
+import { Toaster } from "sonner";
 
 export default function Show({ pin }) {
+    const { flash } = usePage().props;
     const [isEditing, setIsEditing] = useState(false);
     const [preview, setPreview] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -13,6 +18,7 @@ export default function Show({ pin }) {
         data,
         setData,
         post: handlePost,
+        delete: destroy,
         processing,
         errors,
         reset,
@@ -43,7 +49,11 @@ export default function Show({ pin }) {
 
     const confirmDelete = () => {
         setShowDeleteModal(false);
-        router.delete(route("pins.delete", pin.id));
+        destroy(route("pins.delete", pin.id), {
+            onSuccess: (page) => {
+                toast.success(page.props.flash.success);
+            },
+        });
     };
 
     const submit = (event) => {
@@ -52,10 +62,11 @@ export default function Show({ pin }) {
         handlePost(route("pins.update", pin.id), {
             _method: "patch",
             forceFormData: true,
-            onSuccess: () => {
+            onSuccess: (page) => {
                 setIsEditing(false);
                 setPreview(null);
                 reset("image");
+                toast.success(page.props.flash.success);
             },
         });
     };
@@ -65,6 +76,7 @@ export default function Show({ pin }) {
             <Head title={pin.title} />
 
             <div className="py-12">
+                <Toaster />
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="relative overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="absolute top-0 left-0">
@@ -99,20 +111,20 @@ export default function Show({ pin }) {
                                                 onClick={() =>
                                                     setIsEditing(true)
                                                 }
-                                                className="inline-flex items-center p-2 text-indigo-600 bg-white border border-indigo-600 rounded-md hover:bg-indigo-50"
+                                                className="inline-flex items-center text-indigo-600"
                                             >
                                                 <Pencil size={20} />
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={handleDelete}
-                                                className="inline-flex items-center p-2 text-red-600 bg-white border border-red-600 rounded-md hover:bg-red-50"
+                                                className="inline-flex items-center text-red-600"
                                             >
                                                 <Trash2 size={20} />
                                             </button>
                                         </>
                                     ) : (
-                                        <button
+                                        <SecondaryButton
                                             type="button"
                                             onClick={() => {
                                                 setIsEditing(false);
@@ -123,10 +135,9 @@ export default function Show({ pin }) {
                                                     "image",
                                                 );
                                             }}
-                                            className="inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
                                         >
                                             Cancel
-                                        </button>
+                                        </SecondaryButton>
                                     )}
                                 </div>
 
@@ -219,13 +230,13 @@ export default function Show({ pin }) {
                                             />
                                         </div>
 
-                                        <button
+                                        <PrimaryButton
                                             type="submit"
                                             disabled={processing}
-                                            className="inline-flex items-center px-4 py-2 mt-6 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+                                            className="mt-6"
                                         >
                                             Save Changes
-                                        </button>
+                                        </PrimaryButton>
                                     </form>
                                 )}
                             </div>

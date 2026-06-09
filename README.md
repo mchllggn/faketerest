@@ -1,59 +1,144 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Faketerest
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Faketerest is a Pinterest-inspired Laravel application for saving and managing image pins. Users can register or log in, upload image-based pins, browse pins in a responsive grid, and manage their own profile and content.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Email/password authentication with Laravel Breeze
+- Facebook login via Laravel Socialite
+- Verified, authenticated user area
+- Create pins with a title, optional description, and image upload
+- Preview uploaded images before saving
+- View, edit, replace, and delete your own pins
+- Profile page with the user's pin collection
+- Snowflake-style IDs for users and pins
+- Responsive React UI powered by Inertia.js and Tailwind CSS
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Laravel 12
+- PHP 8.2+
+- Inertia.js
+- React 18
+- Tailwind CSS
+- Vite
+- Laravel Breeze
+- Laravel Socialite
+- SQLite by default
 
-## Learning Laravel
+## Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP 8.2 or newer
+- Composer
+- Node.js
+- pnpm or npm
+- SQLite, MySQL, PostgreSQL, or another Laravel-supported database
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation
 
-## Laravel Sponsors
+Clone the project and install the backend and frontend dependencies:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+composer install
+pnpm install
+```
 
-### Premium Partners
+Create your environment file and application key:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```powershell
+cp .env.example .env
+php artisan key:generate
+```
 
-## Contributing
+Prepare the database. The default `.env.example` uses SQLite, so create the database file if it does not exist:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```powershell
+New-Item -ItemType File database/database.sqlite
+php artisan migrate
+```
 
-## Code of Conduct
+Create the public storage link so uploaded pin images can be served from `/storage`:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan storage:link
+```
 
-## Security Vulnerabilities
+## Running the App
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Start the Laravel server:
+
+```bash
+php artisan serve
+```
+
+In another terminal, start Vite:
+
+```bash
+pnpm dev
+```
+
+Open the app at:
+
+```text
+http://127.0.0.1:8000
+```
+
+You can also use the Composer development script to run the server, queue listener, logs, and Vite together:
+
+```bash
+composer run dev
+```
+
+## Facebook Login
+
+Facebook OAuth is configured through `config/services.php`. Add these values to your `.env` file when you want to enable Facebook login:
+
+```env
+FACEBOOK_CLIENT_ID=your-facebook-client-id
+FACEBOOK_CLIENT_SECRET=your-facebook-client-secret
+FACEBOOK_REDIRECT_URI="${APP_URL}/auth/callback"
+```
+
+Make sure the callback URL in your Facebook app settings matches the `FACEBOOK_REDIRECT_URI` value.
+
+## Image Uploads
+
+Pins require an image file up to 10 MB. Uploaded images are stored on the public disk under the `pins` directory and displayed through Laravel's `/storage` symlink.
+
+If images do not appear, run:
+
+```bash
+php artisan storage:link
+```
+
+## Useful Commands
+
+```bash
+php artisan migrate
+php artisan test
+pnpm dev
+pnpm build
+composer run dev
+```
+
+## Project Structure
+
+- `app/Http/Controllers/PinController.php` handles pin creation, viewing, updating, and deletion.
+- `app/Models/Pin.php` defines the pin model and ownership relationship.
+- `resources/js/Pages/Home.jsx` displays the authenticated pin grid.
+- `resources/js/Pages/Profile.jsx` displays the user's profile and pin collection.
+- `resources/js/Pages/Pins/Create.jsx` contains the pin upload form.
+- `resources/js/Pages/Pins/Show.jsx` contains the pin detail, edit, and delete view.
+- `routes/web.php` defines the main pages, auth-protected routes, pin routes, and OAuth redirects.
+
+## Testing
+
+Run the Laravel test suite with:
+
+```bash
+php artisan test
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is built on Laravel and is open-sourced under the MIT license.
