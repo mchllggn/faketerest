@@ -15,9 +15,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs
 
-# Install pnpm
-RUN npm install -g pnpm
-
 # Set working directory
 WORKDIR /var/www
 
@@ -28,7 +25,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Install Node dependencies and build frontend
-RUN pnpm install && pnpm run build
+RUN npm install && npm run build
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
