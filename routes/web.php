@@ -42,5 +42,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/debug/session', function () {
+    return response()->json([
+        'session_id' => session()->getId(),
+        'session_driver' => config('session.driver'),
+        'session_domain' => config('session.domain'),
+        'secure_cookie' => config('session.secure_cookie'),
+        'cookie_name' => config('session.cookie'),
+        'csrf_token' => csrf_token(),
+        'cookies_received' => request()->cookies->keys(),
+        'headers_x_forwarded' => [
+            'for' => request()->header('X-Forwarded-For'),
+            'host' => request()->header('X-Forwarded-Host'),
+            'proto' => request()->header('X-Forwarded-Proto'),
+            'port' => request()->header('X-Forwarded-Port'),
+        ],
+        'is_secure' => request()->secure(),
+        'url' => request()->url(),
+    ]);
+});
+
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
