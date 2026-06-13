@@ -59,8 +59,17 @@ Route::get('/debug/session', function () {
         ],
         'is_secure' => request()->secure(),
         'url' => request()->url(),
+        'user' => auth()->check() ? auth()->user()->only(['id', 'name', 'email']) : null,
     ]);
 });
+
+Route::get('/debug/login-check', function () {
+    return response()->json([
+        'authenticated' => auth()->check(),
+        'user' => auth()->check() ? auth()->user()->only(['id', 'name', 'email', 'provider']) : null,
+        'session_id' => session()->getId(),
+    ]);
+})->middleware('auth');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
