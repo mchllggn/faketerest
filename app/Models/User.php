@@ -24,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -56,5 +57,20 @@ class User extends Authenticatable
     public function pins(): HasMany
     {
         return $this->hasMany(Pin::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isModerator(): bool
+    {
+        return $this->role === 'moderator';
+    }
+
+    public function isStaff(): bool
+    {
+        return in_array($this->role, ['admin', 'moderator']);
     }
 }
