@@ -56,8 +56,10 @@ class SocialiteController extends Controller
                 }
             }
 
-            Auth::login($user);
-            return redirect()->route('home');
+            Auth::login($user, true);
+            session()->regenerate();
+
+            return redirect()->intended(route('home'));
         } catch (\Exception $e) {
             Log::error('Facebook OAuth Error', [
                 'message' => $e->getMessage(),
