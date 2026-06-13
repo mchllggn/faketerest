@@ -25,7 +25,12 @@ class SocialiteController extends Controller
 
             $email = $facebookUser->email ?? $facebookUser->id . '@Facebook-user.local';
 
-            $user = User::where('provider_id', $facebookUser->id)->orWhere('email', $email)->first();
+            $user = User::where('provider_id', $facebookUser->id)->first();
+
+            if (!$user) {
+                $user = User::where('email', $email)->first();
+            }
+
             if (!$user) {
                 $user = User::create([
                     'name' => $facebookUser->name ?? 'Facebook user',
@@ -33,8 +38,18 @@ class SocialiteController extends Controller
                     'provider_id' => $facebookUser->id,
                     'provider' => 'facebook',
                     'password' => bcrypt(Str::random(24)),
+                    'email_verified_at' => now(),
                 ]);
+            } else {
+                // Link Facebook provider to existing account if not already linked
+                if (!$user->provider_id) {
+                    $user->update([
+                        'provider_id' => $facebookUser->id,
+                        'provider' => 'facebook',
+                    ]);
+                }
             }
+
             Auth::login($user);
             return redirect()->route('home');
         } catch (\Exception $e) {

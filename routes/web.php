@@ -15,7 +15,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-})->middleware(['guest']);
+})->name('landing-page');
 
 Route::get('/home', function () {
     $pins = Pin::with('user')->get();
@@ -43,3 +43,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';

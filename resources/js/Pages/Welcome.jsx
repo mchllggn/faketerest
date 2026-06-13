@@ -1,8 +1,7 @@
 import AuthModal from "@/Components/AuthModal";
+import { router } from "@inertiajs/react";
 import { Head, Link } from "@inertiajs/react";
 import { useState } from "react";
-
-const navItems = ["Explore", "About"];
 
 export default function Welcome({ auth }) {
     const isAuthenticated = Boolean(auth?.user);
@@ -17,30 +16,22 @@ export default function Welcome({ auth }) {
     return (
         <>
             <Head title="Welcome" />
-            <div className="relative min-h-screen overflow-hidden bg-[#faf6f0] text-zinc-950">
+
+            {/* Background */}
+            <div className="h-screen relative overflow-hidden bg-[#faf6f0] text-zinc-950">
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute -top-24 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#e60023]/15 blur-3xl" />
+                    <div className="absolute -bottom-24 left-[-120px] h-[420px] w-[420px] rounded-full bg-[#ffb18f]/35 blur-3xl" />
+                </div>
+
                 <header className="relative z-10 px-5 pt-4 sm:px-8 lg:px-10">
                     <div className="mx-auto flex w-full max-w-[1180px] items-center justify-between gap-4 rounded-full px-1 py-2">
                         <div className="flex items-center gap-8">
-                            <Link
-                                href="/"
-                                className="flex items-center gap-1.5 text-[#e60023]"
-                            >
+                            <button type="button" disabled="landing-page">
                                 <span className="text-[1.6rem] font-extrabold tracking-[-0.06em] text-[#e60023]">
                                     Faketerest
                                 </span>
-                            </Link>
-
-                            <nav className="hidden items-center gap-8 text-[1.02rem] font-medium text-zinc-950 md:flex">
-                                {navItems.map((item) => (
-                                    <a
-                                        key={item}
-                                        href="#"
-                                        className="transition hover:text-[#e60023]"
-                                    >
-                                        {item}
-                                    </a>
-                                ))}
-                            </nav>
+                            </button>
                         </div>
 
                         <div className="items-center hidden gap-3 md:flex">
@@ -65,20 +56,18 @@ export default function Welcome({ auth }) {
                 </header>
 
                 <main className="relative z-10 mx-auto flex w-full max-w-[1180px] flex-col items-center px-5 pb-10 pt-2 sm:px-8 lg:px-10">
-                    <section className="flex flex-col items-center flex-1 w-full mt-12 text-center">
-                        <div className="mt-2 max-w-[43rem] lg:mt-8">
-                            <h1 className="text-[clamp(4rem,8vw,8rem)] font-black leading-[0.9] tracking-[-0.08em] text-zinc-950 sm:leading-[0.86]">
-                                <span className="block">Welcome to</span>
-                                <span className="relative mt-1 block h-[1.05em] overflow-hidden text-[#ffb18f]">
-                                    <span className="absolute inset-0 block">
-                                        Faketerest
-                                    </span>
-                                </span>
+                    {/* Hero */}
+                    <section className="w-full pt-8 mt-12 text-center">
+                        <div className="flex flex-col items-center gap-5 mx-auto">
+                            <h1 className="text-8xl font-semibold text-[#ffb18f]">
+                                Faketerest
                             </h1>
+                            <p className="text-4xl font-semibold text-zinc-700">
+                                A Pinterest Clone
+                            </p>
                         </div>
                     </section>
                 </main>
-
                 <AuthModal
                     show={authModalOpen}
                     mode={authModalMode}

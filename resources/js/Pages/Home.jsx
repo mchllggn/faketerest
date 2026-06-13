@@ -15,7 +15,7 @@ export default function Home({ pins = [] }) {
                             </div>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-4 gap-4 md:grid-cols-5 lg:grid-cols-6">
+                        <div className="grid grid-cols-4 gap-4">
                             {pins.map((pin) => (
                                 <Link
                                     key={pin.id}
@@ -24,9 +24,15 @@ export default function Home({ pins = [] }) {
                                     <div className="overflow-hidden rounded-lg shadow-sm cursor-pointer group">
                                         {pin.image_path && (
                                             <img
-                                                src={`/storage/${pin.image_path}`}
+                                                src={
+                                                    pin.image_path.startsWith(
+                                                        "http",
+                                                    )
+                                                        ? pin.image_path
+                                                        : `/storage/${pin.image_path}`
+                                                }
                                                 alt={pin.title}
-                                                className="w-full h-full object-cover aspect-[9/16] group-hover:brightness-75 transition-all duration-200"
+                                                className="object-cover w-full h-full transition-all duration-200 group-hover:brightness-75"
                                             />
                                         )}
                                     </div>

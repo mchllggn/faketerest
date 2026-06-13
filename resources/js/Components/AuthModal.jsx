@@ -67,7 +67,7 @@ export default function AuthModal({
     };
 
     return (
-        <Modal show={show} onClose={close} maxWidth="lg">
+        <Modal show={show} onClose={close} maxWidth="md">
             <div className="overflow-hidden bg-white">
                 <div className="p-6 sm:p-8">
                     <div className="flex items-start justify-between gap-4">
