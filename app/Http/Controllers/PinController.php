@@ -26,13 +26,22 @@ class PinController extends Controller
     {
         $data = $request->validated();
 
-        $path = $request->file('image')->store('pins', 'public');
+        $uploadedFile = cloudinary()->uploadApi()->upload($request->file('image')->getRealPath(), [
+            'folder' => 'pins',
+            'transformation' => [
+                'quality' => 'auto:best',
+                'fetch_format' => 'auto',
+                'width' => 1920,
+                'crop' => 'limit',
+            ]
+        ]);
 
         Pin::create([
             'user_id' => Auth::user()->id,
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
-            'image_path' => $path,
+            'image_path' => $uploadedFile['secure_url'],
+            'public_id' => $uploadedFile['public_id'],
         ]);
 
         return redirect()->route('profile.edit')->with('success', 'Pin created.');
@@ -43,10 +52,8 @@ class PinController extends Controller
      */
     public function show(Pin $pin)
     {
-        abort_unless((string) $pin->user_id === (string) Auth::id(), 403);
-
         return inertia('Pins/Show', [
-            'pin' => $pin,
+            'pin' => $pin->load('user'),
         ]);
     }
 
@@ -81,11 +88,13 @@ class PinController extends Controller
     {
         abort_unless((string) $pin->user_id === (string) Auth::id(), 403);
 
-        if ($pin->image_path) {
+        if ($pin->public_id) {
+            cloudinary()->uploadApi()->destroy($pin->public_id);
+        } elseif ($pin->image_path) {
             Storage::disk('public')->delete($pin->image_path);
         }
 
-        $pin->delete();
+        $pin->delete($pin);
 
         return redirect()->route('profile.edit')->with('success', 'Pin deleted.');
     }

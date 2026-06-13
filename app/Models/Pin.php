@@ -21,12 +21,15 @@ class Pin extends Model
         'title',
         'description',
         'image_path',
+        'public_id',
     ];
 
     protected static function booted()
     {
         static::deleting(function ($pin) {
-            if ($pin->image_path) {
+            if ($pin->public_id) {
+                cloudinary()->uploadApi()->destroy($pin->public_id);
+            } elseif ($pin->image_path) {
                 Storage::delete($pin->image_path);
             }
         });
