@@ -42,11 +42,17 @@ class SocialiteController extends Controller
                 ]);
             } else {
                 // Link Facebook provider to existing account if not already linked
+                $updateData = [];
                 if (!$user->provider_id) {
-                    $user->update([
-                        'provider_id' => $facebookUser->id,
-                        'provider' => 'facebook',
-                    ]);
+                    $updateData['provider_id'] = $facebookUser->id;
+                    $updateData['provider'] = 'facebook';
+                }
+                // Auto-verify email since Facebook accounts always have a verified email
+                if (!$user->email_verified_at) {
+                    $updateData['email_verified_at'] = now();
+                }
+                if (!empty($updateData)) {
+                    $user->update($updateData);
                 }
             }
 
@@ -55,8 +61,11 @@ class SocialiteController extends Controller
         } catch (\Exception $e) {
             Log::error('Facebook OAuth Error', [
                 'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
-            return redirect()->route('welcome')->withErrors('Facebook authentication failed.');
+            return redirect()->route('landing-page')->withErrors([
+                'facebook' => 'Facebook authentication failed: ' . $e->getMessage(),
+            ]);
         }
     }
 }
