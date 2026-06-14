@@ -74,5 +74,16 @@ Route::get('/debug/login-check', function () {
     ]);
 })->middleware('auth');
 
+Route::get('/debug/test-mail', function () {
+    try {
+        \Illuminate\Support\Facades\Mail::raw('Test email from Render', function ($message) {
+            $message->to('maykelanuge@gmail.com')->subject('Render Mail Test');
+        });
+        return response()->json(['status' => 'sent']);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'failed', 'error' => $e->getMessage()]);
+    }
+});
+
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
