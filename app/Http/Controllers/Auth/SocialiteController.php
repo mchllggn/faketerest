@@ -5,27 +5,72 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class SocialiteController extends Controller
 {
-    public function redirect()
+    protected array $supportedProviders = ['facebook', 'google'];
+
+    protected function getScopes(string $provider): array
     {
-        return Socialite::driver('facebook')
-            ->scopes(['email'])
+        return match ($provider) {
+            'google' => ['openid', 'email', 'profile'],
+            'facebook' => ['email'],
+            default => ['email'],
+        };
+    }
+
+    protected function getErrorKey(string $provider): string
+    {
+        return $provider;
+    }
+
+    protected function getFallbackEmail(string $provider, $providerUser): string
+    {
+        return match ($provider) {
+            'google' => $providerUser->email ?? $providerUser->id . '@google-user.local',
+            'facebook' => $providerUser->email ?? $providerUser->id . '@facebook-user.local',
+            default => $providerUser->id . '@' . $provider . '-user.local',
+        };
+    }
+
+    protected function getDisplayName(string $provider, $providerUser): string
+    {
+        return match ($provider) {
+            'google' => $providerUser->name ?? 'Google user',
+            'facebook' => $providerUser->name ?? 'Facebook user',
+            default => $providerUser->name ?? ucfirst($provider) . ' user',
+        };
+    }
+
+    public function redirect(Request $request, string $provider)
+    {
+        if (!in_array($provider, $this->supportedProviders)) {
+            abort(404);
+        }
+
+        return Socialite::driver($provider)
+            ->scopes($this->getScopes($provider))
             ->redirect();
     }
 
-    public function callback()
+    public function callback(Request $request, string $provider)
     {
+        if (!in_array($provider, $this->supportedProviders)) {
+            abort(404);
+        }
+
         try {
-            $facebookUser = Socialite::driver('facebook')->stateless()->user();
+            $providerUser = Socialite::driver($provider)->stateless()->user();
 
-            $email = $facebookUser->email ?? $facebookUser->id . '@Facebook-user.local';
+            $email = $this->getFallbackEmail($provider, $providerUser);
 
-            $user = User::where('provider_id', $facebookUser->id)->first();
+            $user = User::where('provider_id', $providerUser->id)
+                ->where('provider', $provider)
+                ->first();
 
             if (!$user) {
                 $user = User::where('email', $email)->first();
@@ -33,21 +78,19 @@ class SocialiteController extends Controller
 
             if (!$user) {
                 $user = User::create([
-                    'name' => $facebookUser->name ?? 'Facebook user',
+                    'name' => $this->getDisplayName($provider, $providerUser),
                     'email' => $email,
-                    'provider_id' => $facebookUser->id,
-                    'provider' => 'facebook',
+                    'provider_id' => $providerUser->id,
+                    'provider' => $provider,
                     'password' => bcrypt(Str::random(24)),
                     'email_verified_at' => now(),
                 ]);
             } else {
-                // Link Facebook provider to existing account if not already linked
                 $updateData = [];
                 if (!$user->provider_id) {
-                    $updateData['provider_id'] = $facebookUser->id;
-                    $updateData['provider'] = 'facebook';
+                    $updateData['provider_id'] = $providerUser->id;
+                    $updateData['provider'] = $provider;
                 }
-                // Auto-verify email since Facebook accounts always have a verified email
                 if (!$user->email_verified_at) {
                     $updateData['email_verified_at'] = now();
                 }
@@ -61,12 +104,12 @@ class SocialiteController extends Controller
 
             return redirect()->intended(route('home'));
         } catch (\Exception $e) {
-            Log::error('Facebook OAuth Error', [
+            Log::error(ucfirst($provider) . ' OAuth Error', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
             return redirect()->route('landing-page')->withErrors([
-                'facebook' => 'Facebook authentication failed: ' . $e->getMessage(),
+                $this->getErrorKey($provider) => ucfirst($provider) . ' authentication failed: ' . $e->getMessage(),
             ]);
         }
     }

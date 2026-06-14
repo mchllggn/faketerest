@@ -67,17 +67,20 @@ export default function AuthModal({
     };
 
     return (
-        <Modal show={show} onClose={close} maxWidth="md">
+        <Modal show={show} onClose={close} maxWidth="lg">
             <div className="overflow-hidden bg-white">
-                <div className="p-6 sm:p-8">
+                <div className="p-4 sm:p-6 md:p-8">
                     <div className="flex items-start justify-between gap-4">
-                        <h3 className="mt-2 text-3xl font-black tracking-[-0.05em] text-zinc-950">
+                        <h3 className="mt-1 text-xl font-black tracking-[-0.05em] text-zinc-950 sm:text-2xl md:text-3xl">
                             {currentMode === "login" ? "Log in" : "Sign up"}
                         </h3>
                     </div>
 
                     {currentMode === "login" ? (
-                        <form onSubmit={submitLogin} className="mt-8 space-y-4">
+                        <form
+                            onSubmit={submitLogin}
+                            className="mt-5 space-y-4 sm:mt-8"
+                        >
                             <div>
                                 <InputLabel
                                     htmlFor="login_email"
@@ -146,7 +149,7 @@ export default function AuthModal({
                             </label>
                             <PrimaryButton
                                 disabled={loginForm.processing}
-                                className="w-full py-3"
+                                className="w-full py-2.5 text-sm sm:py-3 sm:text-base"
                             >
                                 Log in
                             </PrimaryButton>
@@ -157,12 +160,22 @@ export default function AuthModal({
                                 </span>
                                 <div className="flex-1 w-full border-t border-gray-300" />
                             </div>
-                            <div className="flex items-center justify-center">
+                            <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3 sm:justify-center">
                                 <a
-                                    href={route("auth.redirect")}
-                                    className="px-4 py-2 text-white transition bg-blue-600 rounded-full hover:bg-blue-700"
+                                    href={route("auth.redirect", {
+                                        provider: "facebook",
+                                    })}
+                                    className="w-full px-4 py-2.5 text-sm text-center text-white transition bg-blue-600 rounded-full hover:bg-blue-700 sm:w-auto sm:text-base"
                                 >
                                     Continue with Facebook
+                                </a>
+                                <a
+                                    href={route("auth.redirect", {
+                                        provider: "google",
+                                    })}
+                                    className="w-full px-4 py-2.5 text-sm text-center text-white transition bg-red-600 rounded-full hover:bg-red-700 sm:w-auto sm:text-base"
+                                >
+                                    Continue with Google
                                 </a>
                             </div>
 
@@ -179,7 +192,7 @@ export default function AuthModal({
                     ) : (
                         <form
                             onSubmit={submitRegister}
-                            className="mt-8 space-y-4"
+                            className="mt-5 space-y-3 sm:mt-8 sm:space-y-4"
                         >
                             <div>
                                 <InputLabel
@@ -290,7 +303,7 @@ export default function AuthModal({
                                 />
                             </div>
 
-                            <div className="flex items-center justify-between gap-4 pt-2">
+                            <div className="flex flex-col-reverse items-stretch gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                                 <button
                                     type="button"
                                     onClick={toggleMode}
@@ -301,6 +314,7 @@ export default function AuthModal({
 
                                 <PrimaryButton
                                     disabled={registerForm.processing}
+                                    className="w-full py-2.5 text-sm sm:w-auto sm:py-2 sm:text-base"
                                 >
                                     Register
                                 </PrimaryButton>
