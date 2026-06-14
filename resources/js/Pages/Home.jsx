@@ -6,22 +6,24 @@ export default function Home({ pins = [] }) {
     return (
         <AuthenticatedLayout title={"Home"}>
             <Toaster />
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div className="px-3 py-6 sm:px-4 sm:py-8 md:py-12">
+                <div className="mx-auto max-w-7xl">
                     {pins.length === 0 ? (
-                        <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                            <div className="text-center text-gray-900">
-                                <p>You haven't created any pins yet.</p>
+                        <div className="overflow-hidden bg-white rounded-lg shadow-sm">
+                            <div className="p-6 text-center text-gray-900 sm:p-8">
+                                <p className="text-base sm:text-lg">
+                                    You haven't created any pins yet.
+                                </p>
                             </div>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4 lg:gap-6">
                             {pins.map((pin) => (
                                 <Link
                                     key={pin.id}
                                     href={route("pins.show", pin.id)}
                                 >
-                                    <div className="overflow-hidden rounded-lg shadow-sm cursor-pointer group">
+                                    <div className="overflow-hidden rounded-lg shadow-sm cursor-pointer group aspect-square">
                                         {pin.image_path && (
                                             <img
                                                 src={

@@ -51,7 +51,7 @@ export default function Create() {
                                 onSubmit={submit}
                                 className="grid gap-6 md:grid-cols-2"
                             >
-                                <div>
+                                <div className="order-2 md:order-1">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">
                                             Title
@@ -94,12 +94,12 @@ export default function Create() {
                                         />
                                     </div>
 
-                                    <div className="mt-4">
+                                    <div className="flex justify-end mt-4">
                                         <PrimaryButton>Create</PrimaryButton>
                                     </div>
                                 </div>
 
-                                <div>
+                                <div className="order-1 md:order-2">
                                     <label className="block text-sm font-medium text-gray-700">
                                         Upload image
                                     </label>
