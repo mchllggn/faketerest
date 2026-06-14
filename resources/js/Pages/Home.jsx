@@ -6,7 +6,7 @@ export default function Home({ pins = [] }) {
     return (
         <AuthenticatedLayout title={"Home"}>
             <Toaster />
-            <div className="px-3 py-6 sm:px-4 sm:py-8 md:py-12">
+            <div className="px-4 py-4 sm:px-6 sm:py-6">
                 <div className="mx-auto max-w-7xl">
                     {pins.length === 0 ? (
                         <div className="overflow-hidden bg-white rounded-lg shadow-sm">
@@ -17,26 +17,25 @@ export default function Home({ pins = [] }) {
                             </div>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4 lg:gap-6">
+                        <div className="gap-4 columns-2 sm:columns-3 md:columns-4">
                             {pins.map((pin) => (
                                 <Link
                                     key={pin.id}
                                     href={route("pins.show", pin.id)}
+                                    className="block mb-4 break-inside-avoid"
                                 >
-                                    <div className="overflow-hidden rounded-lg shadow-sm cursor-pointer group aspect-square">
-                                        {pin.image_path && (
-                                            <img
-                                                src={
-                                                    pin.image_path.startsWith(
-                                                        "http",
-                                                    )
-                                                        ? pin.image_path
-                                                        : `/storage/${pin.image_path}`
-                                                }
-                                                alt={pin.title}
-                                                className="object-cover w-full h-full transition-all duration-200 group-hover:brightness-75"
-                                            />
-                                        )}
+                                    <div className="overflow-hidden rounded-lg shadow-sm cursor-pointer group">
+                                        <img
+                                            src={
+                                                pin.image_path.startsWith(
+                                                    "http",
+                                                )
+                                                    ? pin.image_path
+                                                    : `/storage/${pin.image_path}`
+                                            }
+                                            alt={pin.title}
+                                            className="object-cover w-full transition-all duration-200 group-hover:brightness-75"
+                                        />
                                     </div>
                                 </Link>
                             ))}
