@@ -149,7 +149,7 @@ export default function AuthModal({
                             </label>
                             <PrimaryButton
                                 disabled={loginForm.processing}
-                                className="w-full py-2.5 text-sm sm:py-3 sm:text-base"
+                                className="w-full py-2.5 text-sm sm:py-3 sm:text-base bg-jihyo hover:bg-jihyo/90 focus:ring-jihyo"
                             >
                                 Log in
                             </PrimaryButton>
@@ -161,19 +161,19 @@ export default function AuthModal({
                                 <div className="flex-1 w-full border-t border-gray-300" />
                             </div>
                             <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3 sm:justify-center">
-                                <a
+                                {/* <a
                                     href={route("auth.redirect", {
                                         provider: "facebook",
                                     })}
                                     className="w-full px-4 py-2.5 text-sm text-center text-white transition bg-blue-600 rounded-full hover:bg-blue-700 sm:w-auto sm:text-base"
                                 >
                                     Continue with Facebook
-                                </a>
+                                </a> */}
                                 <a
                                     href={route("auth.redirect", {
                                         provider: "google",
                                     })}
-                                    className="w-full px-4 py-2.5 text-sm text-center text-white transition bg-red-600 rounded-full hover:bg-red-700 sm:w-auto sm:text-base"
+                                    className="w-full px-4 py-2.5 text-sm text-center text-dahyun transitio rounded-full sm:w-auto sm:text-base bg-chaeyoung"
                                 >
                                     Continue with Google
                                 </a>
