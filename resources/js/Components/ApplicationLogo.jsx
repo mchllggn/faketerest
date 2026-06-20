@@ -1,3 +1,10 @@
-export default function ApplicationLogo(props) {
-    return <img src="/logo/logo.png" alt="Faketerest Logo" {...props} />;
+export default function ApplicationLogo({ props, className = "" }) {
+    return (
+        <img
+            src="/logo/logo.png"
+            alt="Faketerest Logo"
+            {...props}
+            className={`h-12 ${className}`}
+        />
+    );
 }

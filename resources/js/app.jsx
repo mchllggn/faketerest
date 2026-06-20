@@ -7,15 +7,6 @@ import { createRoot } from "react-dom/client";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
-// Clean up Facebook OAuth fragment (#_=_) from URL
-if (window.location.hash === "#_=_") {
-    history.replaceState(
-        null,
-        "",
-        window.location.pathname + window.location.search,
-    );
-}
-
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
