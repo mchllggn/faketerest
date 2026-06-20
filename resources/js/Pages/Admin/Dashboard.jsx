@@ -53,7 +53,7 @@ export default function Dashboard({
                         return (
                             <div
                                 key={stat.label}
-                                className="p-6 bg-white rounded-xl shadow-sm border border-gray-100"
+                                className="p-6 bg-white border border-gray-100 shadow-sm rounded-xl"
                             >
                                 <div className="flex items-center gap-4">
                                     <div
@@ -77,7 +77,7 @@ export default function Dashboard({
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                     {/* Recent Users */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div className="bg-white border border-gray-100 shadow-sm rounded-xl">
                         <div className="p-6 border-b border-gray-100">
                             <h2 className="text-lg font-semibold text-gray-900">
                                 Recent Users
@@ -129,7 +129,7 @@ export default function Dashboard({
                     </div>
 
                     {/* Recent Pins */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div className="bg-white border border-gray-100 shadow-sm rounded-xl">
                         <div className="p-6 border-b border-gray-100">
                             <h2 className="text-lg font-semibold text-gray-900">
                                 Recent Pins
@@ -169,7 +169,7 @@ export default function Dashboard({
                 </div>
 
                 {/* Recent Activity */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div className="bg-white border border-gray-100 shadow-sm rounded-xl">
                     <div className="p-6 border-b border-gray-100">
                         <h2 className="text-lg font-semibold text-gray-900">
                             Recent Activity
