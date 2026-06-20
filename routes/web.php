@@ -1,24 +1,17 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PinController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Auth\SocialiteController;
-use App\Models\Pin;
 use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('landing-page');
 
-Route::get('/home', function () {
-    $pins = Pin::with('user')->get();
-    return Inertia::render('Home', [
-        'pins' => $pins,
-    ]);
-})->middleware(['auth', 'verified'])->name('home');
+Route::get('/home', [PinController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
 
 Route::get('auth/{provider}/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
 Route::get('auth/{provider}/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
@@ -43,46 +36,6 @@ Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('p
 Route::middleware('auth')->group(function () {
     Route::get('/data-deletion', [PageController::class, 'dataDeletion'])->name('data.deletion');
     Route::delete('/data-deletion', [PageController::class, 'executeDataDeletion'])->name('data.deletion.execute');
-});
-
-Route::get('/debug/session', function () {
-    return response()->json([
-        'session_id' => session()->getId(),
-        'session_driver' => config('session.driver'),
-        'session_domain' => config('session.domain'),
-        'secure_cookie' => config('session.secure_cookie'),
-        'cookie_name' => config('session.cookie'),
-        'csrf_token' => csrf_token(),
-        'cookies_received' => request()->cookies->keys(),
-        'headers_x_forwarded' => [
-            'for' => request()->header('X-Forwarded-For'),
-            'host' => request()->header('X-Forwarded-Host'),
-            'proto' => request()->header('X-Forwarded-Proto'),
-            'port' => request()->header('X-Forwarded-Port'),
-        ],
-        'is_secure' => request()->secure(),
-        'url' => request()->url(),
-        'user' => auth()->check() ? auth()->user()->only(['id', 'name', 'email']) : null,
-    ]);
-});
-
-Route::get('/debug/login-check', function () {
-    return response()->json([
-        'authenticated' => auth()->check(),
-        'user' => auth()->check() ? auth()->user()->only(['id', 'name', 'email', 'provider']) : null,
-        'session_id' => session()->getId(),
-    ]);
-})->middleware('auth');
-
-Route::get('/debug/test-mail', function () {
-    try {
-        \Illuminate\Support\Facades\Mail::raw('Test email from Render', function ($message) {
-            $message->to('maykelanuge@gmail.com')->subject('Render Mail Test');
-        });
-        return response()->json(['status' => 'sent']);
-    } catch (\Exception $e) {
-        return response()->json(['status' => 'failed', 'error' => $e->getMessage()]);
-    }
 });
 
 require __DIR__ . '/auth.php';

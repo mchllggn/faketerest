@@ -12,6 +12,33 @@ use Illuminate\Support\Facades\Storage;
 class PinController extends Controller
 {
     /**
+     * Display a listing of pins (home feed).
+     */
+    public function index(\Illuminate\Http\Request $request)
+    {
+        $search = $request->query('search');
+
+        $pins = Pin::with('user')
+            ->when($search, function ($query, $search) {
+                $searchTerms = array_filter(explode(' ', strtolower($search)));
+                $query->where(function ($q) use ($searchTerms) {
+                    foreach ($searchTerms as $term) {
+                        $q->where(function ($sub) use ($term) {
+                            $sub->whereRaw('LOWER(title) like ? OR LOWER(title) like ?', ["{$term}%", "% {$term}%"])
+                                ->orWhereRaw('LOWER(description) like ? OR LOWER(description) like ?', ["{$term}%", "% {$term}%"]);
+                        });
+                    }
+                });
+            })
+            ->latest()
+            ->paginate(8);
+
+        return inertia('Home', [
+            'pins' => $pins,
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
