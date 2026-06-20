@@ -46,7 +46,7 @@ export default function Profile({ pins = [] }) {
 
                 <div className="mt-8 text-center">
                     {
-                        <div className="grid grid-cols-4 gap-4 mt-6">
+                        <div className="grid grid-cols-2 gap-4 mt-6 sm:grid-cols-4">
                             {pins.map((pin) => (
                                 <Link
                                     key={pin.id}

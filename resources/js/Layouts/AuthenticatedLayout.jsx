@@ -2,20 +2,19 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import { Link, usePage, Head } from "@inertiajs/react";
-import { Plus } from "lucide-react";
-import { House } from "lucide-react";
+import { House, Crown, Plus } from "lucide-react";
 export default function AuthenticatedLayout({ title, header, children }) {
     const user = usePage().props.auth.user;
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen">
             <Head title={title} />
-            <nav className="bg-white border-b border-gray-100">
+            <nav>
                 <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         <div className="flex items-center shrink-0">
                             <Link href="/">
-                                <ApplicationLogo className="h-12" />
+                                <ApplicationLogo />
                             </Link>
                         </div>
 
@@ -40,9 +39,14 @@ export default function AuthenticatedLayout({ title, header, children }) {
                                         <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none"
+                                                className="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out border border-transparent rounded-md hover:text-gray-700 focus:outline-none"
                                             >
-                                                {user.name}
+                                                <span className="relative">
+                                                    {user.name}
+                                                    <span title="Admin">
+                                                        <Crown className="absolute right-0 w-4 h-4 -top-3 text-jihyo" />
+                                                    </span>
+                                                </span>
 
                                                 <svg
                                                     className="-me-0.5 ms-2 h-4 w-4"
@@ -65,6 +69,11 @@ export default function AuthenticatedLayout({ title, header, children }) {
                                             href={route("profile.edit")}
                                         >
                                             Profile
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
+                                            href={route("admin.dashboard")}
+                                        >
+                                            Admin
                                         </Dropdown.Link>
                                         <Dropdown.Link
                                             href={route("settings.index")}
