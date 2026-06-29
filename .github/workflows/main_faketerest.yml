@@ -50,7 +50,7 @@ jobs:
 
 
       - name: Install frontend dependencies
-        run: npm ci
+        run: npm install
 
 
       - name: Build Vite assets
@@ -64,15 +64,6 @@ jobs:
           mkdir -p storage/framework/sessions
           mkdir -p storage/framework/views
           mkdir -p bootstrap/cache
-
-
-      # Laravel cache
-      # Do not run migrate here because Azure env vars are only available in App Service
-      - name: Cache Laravel files
-        run: |
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
 
 
       # Upload
