@@ -10,11 +10,6 @@ server {
         try_files $uri $uri/ /index.php?$query_string;
     }
 
-    error_page 500 502 503 504 /50x.html;
-    location = /50x.html {
-        root /html/;
-    }
-
     location ~ /\.git {
         deny all;
         access_log off;
@@ -29,7 +24,7 @@ server {
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
         fastcgi_param QUERY_STRING $query_string;
-        fastcgi_intercept_errors on;
+        fastcgi_intercept_errors off;
         fastcgi_connect_timeout 300;
         fastcgi_send_timeout 3600;
         fastcgi_read_timeout 3600;
