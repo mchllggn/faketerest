@@ -97,67 +97,59 @@ export default function Home({ pins }) {
     };
 
     return (
-        <AuthenticatedLayout title={"Home"}>
+        <AuthenticatedLayout
+            title={"Home"}
+            handleSearchInput={handleSearchInput}
+            value={search}
+        >
             <Toaster />
-            <div className="px-4 py-4 sm:px-6 sm:py-6">
-                <div className="mx-auto max-w-7xl">
-                    {/* Search Input */}
-                    <div className="max-w-md mb-6">
-                        <TextInput
-                            type="text"
-                            value={search}
-                            onChange={handleSearchInput}
-                            placeholder="Search..."
-                        />
+            <div className="px-4 py-4 mx-auto sm:px-6 sm:py-6 max-w-7xl">
+                {/* Skeleton Loader */}
+                {isSearching && (
+                    <div className="gap-4 columns-2 sm:columns-3 md:columns-4">
+                        {[...Array(8)].map((_, i) => (
+                            <SkeletonCard key={i} />
+                        ))}
                     </div>
+                )}
 
-                    {/* Skeleton Loader */}
-                    {isSearching && (
-                        <div className="gap-4 columns-2 sm:columns-3 md:columns-4">
-                            {[...Array(8)].map((_, i) => (
-                                <SkeletonCard key={i} />
+                {/* Pins Grid */}
+                {!isSearching && (
+                    <>
+                        <div className="gap-4 columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6">
+                            {items.map((pin) => (
+                                <Link
+                                    key={pin.id}
+                                    href={route("pins.show", pin.id)}
+                                    className="block mb-4 break-inside-avoid"
+                                >
+                                    <div className="overflow-hidden border rounded-lg shadow-sm cursor-pointer group">
+                                        <img
+                                            src={
+                                                pin.image_path.startsWith(
+                                                    "http",
+                                                )
+                                                    ? pin.image_path
+                                                    : `/storage/${pin.image_path}`
+                                            }
+                                            alt={pin.title}
+                                            className="object-cover w-full transition-all duration-200 group-hover:brightness-90"
+                                        />
+                                    </div>
+                                </Link>
                             ))}
                         </div>
-                    )}
 
-                    {/* Pins Grid */}
-                    {!isSearching && (
-                        <>
-                            <div className="gap-4 columns-2 sm:columns-3 md:columns-4">
-                                {items.map((pin) => (
-                                    <Link
-                                        key={pin.id}
-                                        href={route("pins.show", pin.id)}
-                                        className="block mb-4 break-inside-avoid"
-                                    >
-                                        <div className="overflow-hidden border rounded-lg shadow-sm cursor-pointer group">
-                                            <img
-                                                src={
-                                                    pin.image_path.startsWith(
-                                                        "http",
-                                                    )
-                                                        ? pin.image_path
-                                                        : `/storage/${pin.image_path}`
-                                                }
-                                                alt={pin.title}
-                                                className="object-cover w-full transition-all duration-200 group-hover:brightness-90"
-                                            />
-                                        </div>
-                                    </Link>
-                                ))}
+                        {/* Sentinel element for intersection observer */}
+                        <div ref={sentinelRef} className="h-4" />
+
+                        {loading && (
+                            <div className="flex justify-center py-8">
+                                <div className="w-8 h-8 border-4 border-gray-300 rounded-full border-t-gray-900 animate-spin" />
                             </div>
-
-                            {/* Sentinel element for intersection observer */}
-                            <div ref={sentinelRef} className="h-4" />
-
-                            {loading && (
-                                <div className="flex justify-center py-8">
-                                    <div className="w-8 h-8 border-4 border-gray-300 rounded-full border-t-gray-900 animate-spin" />
-                                </div>
-                            )}
-                        </>
-                    )}
-                </div>
+                        )}
+                    </>
+                )}
             </div>
         </AuthenticatedLayout>
     );
