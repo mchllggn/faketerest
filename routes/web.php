@@ -7,11 +7,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\Auth\SocialiteController;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('landing-page');
-
-Route::get('/home', [PinController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
+Route::get('/', [PinController::class, 'index'])->name('home');
 
 Route::get('auth/{provider}/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
 Route::get('auth/{provider}/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
@@ -37,6 +33,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/data-deletion', [PageController::class, 'dataDeletion'])->name('data.deletion');
     Route::delete('/data-deletion', [PageController::class, 'executeDataDeletion'])->name('data.deletion.execute');
 });
+
+// User profile by username (email prefix) — must be after all other routes
+Route::get('/{username}', [\App\Http\Controllers\UserProfileController::class, 'show'])
+    ->where('username', '[a-zA-Z0-9._-]+')
+    ->name('user.profile');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';

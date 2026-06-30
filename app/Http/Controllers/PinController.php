@@ -8,14 +8,19 @@ use App\Models\Pin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class PinController extends Controller
 {
     /**
      * Display a listing of pins (home feed).
      */
-    public function index(\Illuminate\Http\Request $request)
+    public function index(Request $request)
     {
+        if (!auth()->check()) {
+            return inertia('Welcome');
+        }
+
         $search = $request->query('search');
 
         $pins = Pin::with('user')
@@ -23,9 +28,14 @@ class PinController extends Controller
                 $searchTerms = array_filter(explode(' ', strtolower($search)));
                 $query->where(function ($q) use ($searchTerms) {
                     foreach ($searchTerms as $term) {
-                        $q->where(function ($sub) use ($term) {
-                            $sub->whereRaw('LOWER(title) like ? OR LOWER(title) like ?', ["{$term}%", "% {$term}%"])
-                                ->orWhereRaw('LOWER(description) like ? OR LOWER(description) like ?', ["{$term}%", "% {$term}%"]);
+                        // Build a regex pattern that allows optional spaces/underscores
+                        // between each character, e.g. "cutecat" → "c[_ ]*u[_ ]*t[_ ]*e[_ ]*c[_ ]*a[_ ]*t"
+                        $chars = preg_split('//u', $term, -1, PREG_SPLIT_NO_EMPTY);
+                        $pattern = implode('[_ ]*', $chars);
+
+                        $q->where(function ($sub) use ($term, $pattern) {
+                            $sub->whereRaw('LOWER(title) like ? OR LOWER(title) like ? OR LOWER(title) ~* ?', ["{$term}%", "% {$term}%", $pattern])
+                                ->orWhereRaw('LOWER(description) like ? OR LOWER(description) like ? OR LOWER(description) ~* ?', ["{$term}%", "% {$term}%", $pattern]);
                         });
                     }
                 });
