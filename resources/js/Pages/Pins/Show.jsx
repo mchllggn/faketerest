@@ -76,167 +76,157 @@ export default function Show({ pin }) {
     <AuthenticatedLayout>
       <Head title={pin.title} />
 
-      <div className="py-12">
-        <Toaster />
-        <div className="relative mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="overflow-hidden">
-            <div className="absolute top-2 left-2">
-              <button
-                type="button"
-                onClick={() => router.visit(route("home"))}
-                className="inline-flex items-center p-2 text-gray-600 rounded-md hover:text-gray-900"
-              >
-                <ArrowLeft size={24} />
-              </button>
+      <Toaster />
+      <div className="relative mx-auto mt-12 max-w-7xl sm:px-6 lg:px-8">
+        <div className="absolute top-3 left-3">
+          <button
+            type="button"
+            onClick={() => router.visit(route("home"))}
+            className="inline-flex items-center p-2 text-gray-600 rounded-md hover:text-gray-900"
+          >
+            <ArrowLeft size={24} />
+          </button>
+        </div>
+        <div className="overflow-hidden">
+          <div className="grid gap-8 p-6 md:grid-cols-2">
+            <div className="flex justify-center h-[400px] overflow-hidden border rounded-lg bg-stone-400/60">
+              {(preview || pin.image_path) && (
+                <img
+                  src={
+                    preview ||
+                    (pin.image_path.startsWith("http")
+                      ? pin.image_path
+                      : `/storage/${pin.image_path}`)
+                  }
+                  alt={pin.title}
+                  className="object-contain shadow-sm"
+                />
+              )}
             </div>
-            <div className="grid gap-8 p-6 md:grid-cols-2">
-              <div className="flex items-center justify-end">
-                {(preview || pin.image_path) && (
-                  <img
-                    src={
-                      preview ||
-                      (pin.image_path.startsWith("http")
-                        ? pin.image_path
-                        : `/storage/${pin.image_path}`)
-                    }
-                    alt={pin.title}
-                    className="border h-[400px] rounded-lg shadow-sm"
-                  />
-                )}
-              </div>
 
-              <div className="relative">
-                {isOwner && (
-                  <div className="absolute top-0 right-0 flex gap-2">
-                    {!isEditing ? (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => setIsEditing(true)}
-                        >
-                          <Pencil size={20} />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleDelete}
-                          className="inline-flex items-center text-red-600"
-                        >
-                          <Trash2 size={20} />
-                        </button>
-                      </>
-                    ) : (
-                      <SecondaryButton
+            <div className="relative">
+              {isOwner && (
+                <div className="absolute top-0 right-0 flex gap-2">
+                  {!isEditing ? (
+                    <>
+                      <button type="button" onClick={() => setIsEditing(true)}>
+                        <Pencil size={20} />
+                      </button>
+                      <button
                         type="button"
-                        onClick={() => {
-                          setIsEditing(false);
-                          setPreview(null);
-                          reset("title", "description", "image");
-                        }}
+                        onClick={handleDelete}
+                        className="inline-flex items-center text-red-600"
                       >
-                        Cancel
-                      </SecondaryButton>
-                    )}
-                  </div>
-                )}
+                        <Trash2 size={20} />
+                      </button>
+                    </>
+                  ) : (
+                    <SecondaryButton
+                      type="button"
+                      onClick={() => {
+                        setIsEditing(false);
+                        setPreview(null);
+                        reset("title", "description", "image");
+                      }}
+                    >
+                      Cancel
+                    </SecondaryButton>
+                  )}
+                </div>
+              )}
 
-                {!isEditing ? (
-                  <div className="pt-12">
-                    <h1 className="text-4xl font-black text-gray-900">
-                      {pin.title.charAt(0).toUpperCase() + pin.title.slice(1)}
-                    </h1>
+              {!isEditing ? (
+                <div className="pt-12">
+                  <h1 className="text-4xl font-black text-gray-900">
+                    {pin.title.charAt(0).toUpperCase() + pin.title.slice(1)}
+                  </h1>
 
-                    {pin.description && (
-                      <div className="mb-6">
-                        <p className="text-gray-600 whitespace-pre-line">
-                          {pin.description}
-                        </p>
-                      </div>
-                    )}
-
-                    <div className="mb-4">
-                      <p className="text-sm text-gray-500">
-                        Created on{" "}
-                        {new Date(pin.created_at).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}{" "}
-                        by{" "}
-                        {isOwner ? (
-                          <span className="font-medium text-gray-700">You</span>
-                        ) : (
-                          <Link
-                            href={route(
-                              "user.profile",
-                              pin.user.email.split("@")[0],
-                            )}
-                            className="font-medium text-gray-700 cursor-pointer hover:underline"
-                          >
-                            {pin.user.name}
-                          </Link>
-                        )}
+                  {pin.description && (
+                    <div className="mb-6">
+                      <p className="text-gray-600 whitespace-pre-line">
+                        {pin.description}
                       </p>
                     </div>
+                  )}
+
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-500">
+                      Created on{" "}
+                      {new Date(pin.created_at).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}{" "}
+                      by{" "}
+                      {isOwner ? (
+                        <span className="font-medium text-gray-700">You</span>
+                      ) : (
+                        <Link
+                          href={route(
+                            "user.profile",
+                            pin.user.email.split("@")[0],
+                          )}
+                          className="font-medium text-gray-700 cursor-pointer hover:underline"
+                        >
+                          {pin.user.name}
+                        </Link>
+                      )}
+                    </p>
                   </div>
-                ) : (
-                  <form onSubmit={submit} className="pt-12">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Title
-                      </label>
-                      <input
-                        type="text"
-                        value={data.title}
-                        onChange={(event) =>
-                          setData("title", event.target.value)
-                        }
-                        className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        required
-                      />
-                      <InputError message={errors.title} className="mt-2" />
-                    </div>
+                </div>
+              ) : (
+                <form onSubmit={submit} className="pt-12">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      value={data.title}
+                      onChange={(event) => setData("title", event.target.value)}
+                      className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      required
+                    />
+                    <InputError message={errors.title} className="mt-2" />
+                  </div>
 
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Description
-                      </label>
-                      <textarea
-                        rows={6}
-                        value={data.description}
-                        onChange={(event) =>
-                          setData("description", event.target.value)
-                        }
-                        className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      />
-                      <InputError
-                        message={errors.description}
-                        className="mt-2"
-                      />
-                    </div>
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Description
+                    </label>
+                    <textarea
+                      rows={6}
+                      value={data.description}
+                      onChange={(event) =>
+                        setData("description", event.target.value)
+                      }
+                      className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    />
+                    <InputError message={errors.description} className="mt-2" />
+                  </div>
 
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Replace image
-                      </label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="block w-full mt-1 text-sm text-gray-700"
-                      />
-                      <InputError message={errors.image} className="mt-2" />
-                    </div>
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Replace image
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="block w-full mt-1 text-sm text-gray-700"
+                    />
+                    <InputError message={errors.image} className="mt-2" />
+                  </div>
 
-                    <PrimaryButton
-                      type="submit"
-                      disabled={processing}
-                      className="mt-6"
-                    >
-                      Save Changes
-                    </PrimaryButton>
-                  </form>
-                )}
-              </div>
+                  <PrimaryButton
+                    type="submit"
+                    disabled={processing}
+                    className="mt-6"
+                  >
+                    Save Changes
+                  </PrimaryButton>
+                </form>
+              )}
             </div>
           </div>
         </div>

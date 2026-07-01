@@ -1,17 +1,8 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import AuthModal from "@/Components/AuthModal";
 import { Head, Link } from "@inertiajs/react";
-import { useState } from "react";
 
 export default function Welcome({ auth }) {
   const isAuthenticated = Boolean(auth?.user);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authModalMode, setAuthModalMode] = useState("login");
-
-  const openAuthModal = (nextMode) => {
-    setAuthModalMode(nextMode);
-    setAuthModalOpen(true);
-  };
 
   return (
     <>
@@ -56,7 +47,7 @@ export default function Welcome({ auth }) {
           <section className="w-full pt-6 mt-32 text-center sm:pt-8">
             <div className="flex flex-col items-center gap-3 mx-auto sm:gap-5">
               <h1 className="text-6xl font-semibold text-apricot md:text-7xl lg:text-8xl">
-                Faketerestsss
+                Faketerest
               </h1>
               <p className="text-2xl font-semibold text-zinc-700 sm:text-2xl md:text-3xl lg:text-4xl">
                 A Pinterest Clone
@@ -65,11 +56,6 @@ export default function Welcome({ auth }) {
           </section>
         </main>
       </div>
-      <AuthModal
-        show={authModalOpen}
-        mode={authModalMode}
-        onClose={() => setAuthModalOpen(false)}
-      />
     </>
   );
 }

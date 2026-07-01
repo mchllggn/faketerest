@@ -17,9 +17,6 @@ class PinController extends Controller
      */
     public function index(Request $request)
     {
-        if (!auth()->check()) {
-            return inertia('Welcome');
-        }
 
         $search = $request->query('search');
 

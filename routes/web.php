@@ -12,10 +12,10 @@ Route::get('/', [PinController::class, 'index'])->name('home');
 Route::get('auth/{provider}/redirect', [SocialiteController::class, 'redirect'])->name('auth.redirect');
 Route::get('auth/{provider}/callback', [SocialiteController::class, 'callback'])->name('auth.callback');
 
+Route::get('/pins/{pin}', [PinController::class, 'show'])->name('pins.show');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pins/create', [PinController::class, 'create'])->name('pins.create');
     Route::post('/pins', [PinController::class, 'store'])->name('pins.store');
-    Route::get('/pins/{pin}', [PinController::class, 'show'])->name('pins.show');
     Route::match(['post', 'patch'], '/pins/{pin}', [PinController::class, 'update'])->name('pins.update');
     Route::delete('/pins/{pin}', [PinController::class, 'destroy'])->name('pins.delete');
 });
@@ -34,10 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/data-deletion', [PageController::class, 'executeDataDeletion'])->name('data.deletion.execute');
 });
 
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';
+
 // User profile by username (email prefix) — must be after all other routes
 Route::get('/{username}', [\App\Http\Controllers\UserProfileController::class, 'show'])
     ->where('username', '[a-zA-Z0-9._-]+')
     ->name('user.profile');
-
-require __DIR__ . '/auth.php';
-require __DIR__ . '/admin.php';
