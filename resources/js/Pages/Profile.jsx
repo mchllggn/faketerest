@@ -22,9 +22,17 @@ export default function Profile({ pins = [] }) {
         <div className="flex flex-col items-center justify-center mb-8">
           <div className="flex items-center mb-4 space-x-4">
             <div className="flex items-center justify-center w-24 h-24 text-2xl font-semibold uppercase bg-red-100 rounded-full text-slate-800">
-              {user.name ? user.name.charAt(0) : ""}
+              {user.name.charAt(0)}
             </div>
             <div className="text-2xl font-semibold capitalize">{user.name}</div>
+            {user.role === "admin" && (
+              <Link
+                href={route("admin.dashboard")}
+                className="px-3 py-1 text-sm font-semibold text-white transition rounded-full bg-sana hover:bg-sana/90"
+              >
+                Admin
+              </Link>
+            )}
           </div>
           <Link href={route("pins.create")}>
             <PrimaryButton>Create</PrimaryButton>

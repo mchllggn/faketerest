@@ -49,7 +49,7 @@ export default function Create() {
           <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900">
               <form onSubmit={submit} className="grid gap-6 md:grid-cols-2">
-                <div className="order-2 md:order-1">
+                <div className="order-2 md:order-2">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Title
@@ -83,11 +83,19 @@ export default function Create() {
                   </div>
                 </div>
 
-                <div className="order-1 md:order-2">
+                <div className="order-1 md:order-1">
                   <label className="block text-sm font-medium text-gray-700">
                     Upload image
                   </label>
                   <div className="flex items-center justify-center w-full h-56 mt-1 overflow-hidden border-2 border-gray-300 border-dashed rounded-md bg-gray-50">
+                    <input
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                      id="image-upload"
+                    />
                     {preview ? (
                       <div className="relative w-full h-full">
                         <img
@@ -106,14 +114,6 @@ export default function Create() {
                       </div>
                     ) : (
                       <div className="text-center">
-                        <input
-                          type="file"
-                          name="image"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                          className="hidden"
-                          id="image-upload"
-                        />
                         <label
                           htmlFor="image-upload"
                           className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-md shadow-sm cursor-pointer hover:bg-gray-100"
@@ -125,14 +125,6 @@ export default function Create() {
                         </p>
                       </div>
                     )}
-                    <input
-                      type="file"
-                      name="image"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                      id="image-upload"
-                    />
                   </div>
                   <InputError message={errors.image} className="mt-2" />
                 </div>

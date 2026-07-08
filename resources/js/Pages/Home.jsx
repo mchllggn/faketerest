@@ -3,7 +3,6 @@ import { Link, router } from "@inertiajs/react";
 import { Toaster } from "sonner";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useDebounce from "@/Hooks/useDebounce";
-import TextInput from "@/Components/TextInput";
 import AuthModal from "@/Components/AuthModal";
 
 function SkeletonCard() {
